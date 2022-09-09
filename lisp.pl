@@ -2,8 +2,8 @@
 :- use_module(library(pio)).
 :- use_module(library(charsio)).
 
-tokenize(["("|As]) --> ['('], tokenize(As).
-tokenize([")"|As]) --> [')'], tokenize(As).
+tokenize(["("|As]) --> spaces(_), ['('], spaces(_), tokenize(As).
+tokenize([")"|As]) --> spaces(_), [')'], spaces(_), tokenize(As).
 tokenize([A|As]) -->
     spaces(_),
     chars([X|Xs]),
