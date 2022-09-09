@@ -1,6 +1,12 @@
 :- use_module(library(dcgs)).
 :- use_module(library(pio)).
 :- use_module(library(charsio)).
+:- use_module(library(si)).
+
+parse([AST]) --> ['('], parse(AST), [')'].
+parse(AST) --> Ls, { atom_codes(Ls, Cs), number_codes(AST, Cs) }.
+parse(_) --> ... .
+
 
 tokenize(["("|As]) --> spaces(_), ['('], spaces(_), tokenize(As).
 tokenize([")"|As]) --> spaces(_), [')'], spaces(_), tokenize(As).
