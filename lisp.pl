@@ -5,14 +5,13 @@
 :- use_module(library(lists)).
 :- use_module(library(lambda)).
 
-parse([]) --> [].
-parse([ASTl]) --> ["("], parse(ASTl), [")"], parse(_).
-parse([AST]) --> ["("], parse(AST), [")"].
-parse([ASTh|ASTt]) --> [A], { atom_si(A), atom_chars(A, Cs), chars_are_nums(Cs), number_chars(ASTh, Cs) }, parse(ASTt).
-parse([ASTh|ASTt]) --> [ASTh], parse(ASTt).
+parse([], Ls, Ls) --> [].
+parse([AST], [_|Ls0], Ls) --> ['('], parse(AST), [')'], parse(Ls0).
+parse([ASTh|ASTt], Ls, Ls) --> [A], { atom_si(A), atom_chars(A, Cs), chars_are_nums(Cs), number_chars(ASTh, Cs) }, parse(ASTt).
+parse([ASTh|ASTt], Ls, Ls) --> [ASTh], parse(ASTt).
 
-tokenize(["("|As]) --> spaces(_), ['('], spaces(_), tokenize(As).
-tokenize([")"|As]) --> spaces(_), [')'], spaces(_), tokenize(As).
+tokenize(['('|As]) --> spaces(_), ['('], spaces(_), tokenize(As).
+tokenize([')'|As]) --> spaces(_), [')'], spaces(_), tokenize(As).
 tokenize([A|As]) -->
     spaces(_),
     chars([X|Xs]),
